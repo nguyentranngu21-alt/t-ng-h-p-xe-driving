@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <title>Driving Empire · Tra cứu Toàn bộ Xe</title>
+    <style>
+        /* ================= CSS ĐEN - CAM NEON ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        html, body { background: #000000 !important; color: #ffffff; min-height: 100vh; -webkit-text-size-adjust: 100%; }
+        body { display: flex; justify-content: center; padding: 1.5rem 1rem; padding-top: max(1.5rem, env(safe-area-inset-top)); padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); background-image: radial-gradient(circle at 20% 10%, rgba(255,140,0,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 90%, rgba(255,90,0,0.06) 0%, transparent 40%); background-attachment: fixed; }
+        .container { max-width: 1100px; width: 100%; }
+        
+        /* Header */
+        header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1.5rem; padding: 1.2rem 1.3rem; background: #0a0a0a; border: 1px solid #ff8c00; border-radius: 14px; box-shadow: 0 0 8px rgba(255,140,0,0.6), 0 0 20px rgba(255,140,0,0.25), inset 0 0 12px rgba(255,140,0,0.08); }
+        h1 { font-size: 1.7rem; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; text-shadow: 0 0 8px rgba(255,255,255,0.25); }
+        .badge { background: transparent; padding: 0.35rem 1rem; border-radius: 40px; font-size: 0.85rem; color: #ffffff; border: 1px solid #ff8c00; box-shadow: 0 0 6px rgba(255,140,0,0.6), inset 0 0 6px rgba(255,140,0,0.15); }
+        
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+        .stat-card { background: #0a0a0a; border: 1px solid #ff8c00; border-radius: 14px; padding: 1rem 0.8rem; text-align: center; box-shadow: 0 0 6px rgba(255,140,0,0.45), inset 0 0 8px rgba(255,140,0,0.06); }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: #ffffff; margin-bottom: 0.25rem; text-shadow: 0 0 8px rgba(255,255,255,0.25); }
+        .stat-label { font-size: 0.7rem; color: #ffffff; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Search & Filter */
+        .search-section { margin-bottom: 1rem; }
+        .search-box { width: 100%; padding: 0 1.2rem; height: 48px; background: #0a0a0a; border: 1px solid #ff8c00; border-radius: 12px; color: #ffffff; font-size: 16px; outline: none; transition: all 0.25s ease; box-shadow: 0 0 6px rgba(255,140,0,0.5), inset 0 0 8px rgba(255,140,0,0.06); }
+        .search-box::placeholder { color: #ffffff; opacity: 0.45; font-size: 14px; }
+        .search-box:focus { border-color: #ffb040; box-shadow: 0 0 10px rgba(255,140,0,0.9), 0 0 24px rgba(255,140,0,0.4), inset 0 0 10px rgba(255,140,0,0.12); }
+        .brand-toggle { width: 100%; padding: 0 1.2rem; height: 48px; background: #0a0a0a; border: 1px solid #ff8c00; border-radius: 12px; color: #ffffff; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.8rem; transition: all 0.25s ease; box-shadow: 0 0 6px rgba(255,140,0,0.5), inset 0 0 8px rgba(255,140,0,0.06); }
+        .brand-toggle:active, .brand-toggle.active { border-color: #ffb040; box-shadow: 0 0 12px rgba(255,140,0,0.9), 0 0 28px rgba(255,140,0,0.4), inset 0 0 10px rgba(255,140,0,0.12); }
+        .brand-toggle .icon { font-size: 0.75rem; transition: transform 0.3s ease; color: #ff8c00; }
+        .brand-toggle.open .icon { transform: rotate(180deg); }
+        .brand-toggle-current { color: #ff8c00; font-size: 0.82rem; font-weight: 700; margin-left: 0.3rem; text-shadow: 0 0 6px rgba(255,140,0,0.6); }
+        .brand-chips-wrap { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; margin-bottom: 0; }
+        .brand-chips-wrap.open { max-height: 500px; margin-bottom: 1.2rem; }
+        .brand-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 1rem; background: #0a0a0a; border: 1px solid rgba(255,140,0,0.5); border-radius: 12px; box-shadow: 0 0 8px rgba(255,140,0,0.35), inset 0 0 10px rgba(255,140,0,0.05); max-height: 400px; overflow-y: auto; }
+        .chip { padding: 0.5rem 0.9rem; background: #151515; border: 1px solid rgba(255,140,0,0.4); border-radius: 40px; color: #ffffff; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; user-select: none; }
+        .chip:active { transform: scale(0.95); }
+        .chip:hover { border-color: #ff8c00; box-shadow: 0 0 8px rgba(255,140,0,0.5); }
+        .chip.active { background: #ff8c00; color: #000000; border-color: #ff8c00; font-weight: 700; box-shadow: 0 0 12px rgba(255,140,0,0.9), 0 0 24px rgba(255,140,0,0.4); }
+        .chip .count { display: inline-block; margin-left: 0.35rem; font-size: 0.7rem; opacity: 0.7; }
+        .chip.active .count { opacity: 0.9; }
+        
+        /* Section Title */
+        .section-title { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.9rem; display: flex; align-items: center; gap: 0.6rem; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 8px rgba(255,255,255,0.25); }
+        .section-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: #ff8c00; border-radius: 2px; box-shadow: 0 0 8px rgba(255,140,0,0.9); }
+        
+        /* Brand Section */
+        .brand-section { margin-bottom: 2rem; }
+        .brand-title { font-size: 0.95rem; font-weight: 700; color: #ff8c00; text-transform: uppercase; letter-spacing: 1.2px; padding: 0.5rem 0.9rem; margin-bottom: 0.9rem; background: #0a0a0a; border: 1px solid #ff8c00; border-radius: 10px; display: flex; align-items: center; gap: 0.7rem; box-shadow: 0 0 8px rgba(255,140,0,0.5), inset 0 0 8px rgba(255,140,0,0.08); }
+        .brand-title::before { content: ''; width: 4px; height: 16px; background: #ff8c00; border-radius: 2px; box-shadow: 0 0 8px rgba(255,140,0,0.9); }
+        .brand-count { font-size: 0.7rem; color: #ffffff; opacity: 0.6; margin-left: auto; text-transform: none; letter-spacing: 0; font-weight: 500; }
+        
+        /* Vehicle Grid */
+        .vehicle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem; }
+        .vehicle-card { background: #0a0a0a; border: 1px solid #ff8c00; border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 0 6px rgba(255,140,0,0.4), inset 0 0 8px rgba(255,140,0,0.05); animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .vehicle-card:hover, .vehicle-card:active { transform: translateY(-3px); box-shadow: 0 0 15px rgba(255,140,0,0.9), 0 0 30px rgba(255,140,0,0.35), inset 0 0 12px rgba(255,140,0,0.12); }
+        .vehicle-image-wrap { width: 100%; height: 105px; overflow: hidden; background: #151515; border-bottom: 1px solid rgba(255,140,0,0.3); }
+        .vehicle-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease; }
+        .vehicle-card:hover .vehicle-image { transform: scale(1.06); }
+        .vehicle-info { padding: 0.7rem 0.75rem; }
+        .vehicle-name { font-size: 0.78rem; font-weight: 600; color: #ffffff; line-height: 1.3; margin-bottom: 0.4rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2rem; }
+        .vehicle-price { font-size: 0.85rem; font-weight: 700; color: #ff8c00; margin-bottom: 0.45rem; text-shadow: 0 0 6px rgba(255,140,0,0.6); }
+        .vehicle-quick-stats { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.65rem; color: #ffffff; opacity: 0.75; }
+        
+        /* Status Badges */
+        .status-badge { font-size: 0.6rem; padding: 0.15rem 0.4rem; border-radius: 4px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: inline-block; margin-bottom: 0.3rem; }
+        .status-onsale { background: rgba(126, 231, 135, 0.2); color: #7ee787; border: 1px solid #7ee787; }
+        .status-offsale { background: rgba(255, 140, 0, 0.2); color: #ff8c00; border: 1px solid #ff8c00; }
+        .status-event { background: rgba(120, 180, 255, 0.2); color: #78b4ff; border: 1px solid #78b4ff; }
+        .status-limited { background: rgba(255, 80, 200, 0.2); color: #ff50c8; border: 1px solid #ff50c8; }
+        .status-unknown { background: rgba(150, 150, 150, 0.2); color: #999; border: 1px solid #999; }
+        
+        /* Code List */
+        .code-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.8rem; }
+        .code-item { background: #0a0a0a; border: 1px solid #ff8c00; border-radius: 10px; padding: 1rem; display: flex; flex-direction: column; gap: 0.35rem; box-shadow: 0 0 6px rgba(255,140,0,0.4), inset 0 0 6px rgba(255,140,0,0.05); }
+        .code-name { font-family: 'Courier New', monospace; font-weight: 700; color: #ffffff; font-size: 1.05rem; letter-spacing: 1px; text-shadow: 0 0 8px rgba(255,255,255,0.3); }
+        .code-reward { font-size: 0.78rem; color: #ffffff; opacity: 0.75; }
+        .empty-state { padding: 2rem; text-align: center; color: #ffffff; opacity: 0.6; font-style: italic; border: 1px dashed rgba(255,140,0,0.4); border-radius: 12px; }
+        footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255,140,0,0.4); font-size: 0.72rem; color: #ffffff; opacity: 0.6; text-align: center; }
+        
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 999; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal { background: #0a0a0a; border: 1px solid #ff8c00; border-radius: 18px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 20px rgba(255,140,0,0.6), 0 0 60px rgba(255,140,0,0.25), inset 0 0 20px rgba(255,140,0,0.05); transform: translateY(20px) scale(0.96); transition: transform 0.25s ease; position: relative; }
+        .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+        .modal-close { position: absolute; top: 0.8rem; right: 0.8rem; width: 36px; height: 36px; border-radius: 50%; background: #000; border: 1px solid #ff8c00; color: #ff8c00; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 0 10px rgba(255,140,0,0.6); }
+        .modal-close:hover, .modal-close:active { background: #ff8c00; color: #000; }
+        .modal-image { width: 100%; height: 200px; object-fit: cover; border-radius: 18px 18px 0 0; border-bottom: 1px solid #ff8c00; background: #151515; display: block; }
+        .modal-body { padding: 1.3rem; }
+        .modal-brand { font-size: 0.7rem; color: #ff8c00; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 0.3rem; }
+        .modal-title { font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-bottom: 0.4rem; }
+        .modal-price { font-size: 1rem; color: #ff8c00; font-weight: 700; margin-bottom: 1rem; text-shadow: 0 0 8px rgba(255,140,0,0.5); }
+        .modal-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem; }
+        .modal-stat { background: #151515; border: 1px solid rgba(255,140,0,0.3); border-radius: 10px; padding: 0.7rem; text-align: center; }
+        .modal-stat-label { font-size: 0.65rem; color: #ffffff; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
+        .modal-stat-value { font-size: 0.95rem; font-weight: 700; color: #ffffff; }
+        .modal-stat-value .status-badge { margin-bottom: 0; }
+        .modal-desc { font-size: 0.85rem; line-height: 1.6; color: #ffffff; opacity: 0.85; border-top: 1px solid rgba(255,140,0,0.2); padding-top: 0.9rem; }
+        
+        /* Responsive */
+        @media (max-width: 640px) { body { padding: 1rem 0.8rem; } h1 { font-size: 1.15rem; line-height: 1.3; } header { padding: 1rem; gap: 0.6rem; } .badge { font-size: 0.75rem; padding: 0.3rem 0.8rem; } .stat-value { font-size: 1.25rem; } .stat-label { font-size: 0.62rem; } .stat-card { padding: 0.9rem 0.6rem; } .section-title { font-size: 0.9rem; margin: 1.2rem 0 0.8rem; } .code-list { grid-template-columns: 1fr; } .vehicle-grid { grid-template-columns: repeat(2, 1fr); } .vehicle-image-wrap { height: 95px; } .vehicle-name { font-size: 0.75rem; } .brand-title { font-size: 0.85rem; } .modal-image { height: 160px; } .modal-body { padding: 1rem; } .modal-title { font-size: 1.1rem; } .brand-toggle { font-size: 14px; } }
+        @media (max-width: 360px) { h1 { font-size: 1rem; } .stat-value { font-size: 1.1rem; } .stat-label { font-size: 0.58rem; } .vehicle-grid { gap: 0.6rem; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🏎️ Driving Empire</h1>
+        <span class="badge" id="total-badge">– Xe</span>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="stat-total">–</div>
+            <div class="stat-label">Tổng số xe</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-onsale">–</div>
+            <div class="stat-label">Đang bán</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-offsale">–</div>
+            <div class="stat-label">Ngừng bán</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-brands">–</div>
+            <div class="stat-label">Hãng xe</div>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm xe hoặc hãng (GT-R, Supra, Porsche...)">
+    </div>
+
+    <button class="brand-toggle" id="brandToggle" type="button" aria-expanded="false" aria-controls="brandChipsWrap">
+        <span>🏷️ Chọn hãng xe <span class="brand-toggle-current" id="brandCurrent">Tất cả</span></span>
+        <span class="icon">▼</span>
+    </button>
+
+    <div class="brand-chips-wrap" id="brandChipsWrap">
+        <div class="brand-chips" id="brandChips"></div>
+    </div>
+
+    <div class="section-title">Danh sách xe</div>
+    <div id="vehiclesContainer"></div>
+
+    <div class="section-title">Mã code hoạt động</div>
+    <div class="code-list" id="codeList"></div>
+
+    <footer>Dữ liệu tổng hợp từ Bloxodes · 2026 · Đã lọc xe Removed & Off-Sale</footer>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal" role="dialog" aria-modal="true">
+        <button class="modal-close" id="modalClose" aria-label="Đóng">&times;</button>
+        <img class="modal-image" id="modalImage" src="" alt="Hình xe">
+        <div class="modal-body">
+            <div class="modal-brand" id="modalBrand"></div>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div class="modal-price" id="modalPrice"></div>
+            <div class="modal-stats" id="modalStats"></div>
+            <p class="modal-desc" id="modalDesc"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // DỮ LIỆU XE — CHỈ GIỮ XE ON-SALE (đã xóa Removed / Off-Sale)
+    // ==========================================
+    const vehicles = [
+        // ===== TRANG 1 =====
+        { brand: "Spyker", name: "2009 Spyker C8 Aileron Spyder", price: null, speed: 187, handling: 39, acceleration: 27, description: "On-Sale (Licensed); RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Spyker+C8", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 Turbo (992.1) '50 Years Edition'", price: 0, speed: 199, handling: 50, acceleration: 36, description: "On-Sale (Licensed); AWD; 4 chỗ. Free (Event).", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+Turbo", status: "onsale" },
+        { brand: "Audi", name: "Audi Avant RS2 (1996)", price: null, speed: 163, handling: null, acceleration: null, description: "On-Sale; 800 Robux (Audi Pack).", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+RS2", status: "onsale" },
+        { brand: "McLaren", name: "McLaren Elva (2019)", price: null, speed: 223, handling: null, acceleration: null, description: "On-Sale (Licensed); Hypercar; 2 chỗ; McLaren Exclusives Pack.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+Elva", status: "onsale" },
+        { brand: "Lamborghini", name: "2021 Lamborghini Huracan STO", price: 1700000, speed: 190, handling: 61, acceleration: null, description: "On-Sale; RWD; 2 chỗ. 1700 Robux.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lambo+STO", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Huayra BC 'Pacchetto Tempesta' (2021)", price: null, speed: 235, handling: null, acceleration: null, description: "On-Sale (Licensed); Hypercar; 2 chỗ; 2,500 Robux.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Huayra", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Zonda Cinque (2009)", price: null, speed: 220, handling: null, acceleration: null, description: "On-Sale (Licensed); Hypercar; 2 chỗ; 2,500 Robux.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Zonda", status: "onsale" },
+        { brand: "Koenigsegg", name: "Koenigsegg Agera RS (2017)", price: null, speed: 278, handling: 67, acceleration: 60, description: "On-Sale (Licensed); Coupe; RWD; 2 chỗ. 3,500 Robux.", image: "https://placehold.co/600x400/000000/FF8C00?text=Koenigsegg+Agera", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 Turbo 50 Years 'Heritage Design Package' (2024)", price: 0, speed: 199, handling: 53, acceleration: 38, description: "On-Sale (Licensed); RWD; 2 chỗ. Free or 5,000 Robux.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+Heritage", status: "onsale" },
+        { brand: "Pontiac", name: "2003 Pontiac Aztek", price: 12000, speed: 115, handling: 26, acceleration: 16, description: "On-Sale; RWD*; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pontiac+Aztek", status: "onsale" },
+        { brand: "Volkswagen", name: "Volkswagen Golf Mk3 GTI (1992)", price: 15000, speed: 140, handling: 33, acceleration: null, description: "On-Sale (Licensed); FWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Golf+Mk3", status: "onsale" },
+        { brand: "Toyota", name: "2003 Toyota Celica GT-S 6-Speed", price: 20000, speed: 140, handling: 38, acceleration: 18, description: "On-Sale; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+Celica", status: "onsale" },
+        { brand: "Fiat", name: "2016 Fiat 500", price: 20000, speed: 115, handling: 35, acceleration: 13, description: "On-Sale; FWD; 4 chỗ. (185 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Fiat+500", status: "onsale" },
+        { brand: "Citroën", name: "2024 Citroën Ami Buggy", price: 20000, speed: 28, handling: 35, acceleration: 12, description: "On-Sale; FWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Citroen+Ami", status: "onsale" },
+        { brand: "Nissan", name: "1989 Nissan 240SX", price: 22000, speed: 135, handling: 33, acceleration: 17, description: "On-Sale; RWD; 4 chỗ. (217 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Nissan+240SX", status: "onsale" },
+        { brand: "Toyota", name: "2011 Toyota Prius", price: 25000, speed: 112, handling: 40, acceleration: 14, description: "On-Sale; FWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+Prius", status: "onsale" },
+        { brand: "Ford", name: "2011 Ford Crown Victoria LX", price: 30000, speed: 115, handling: 42, acceleration: 16, description: "On-Sale; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Crown+Victoria", status: "onsale" },
+        { brand: "Volkswagen", name: "2001 Volkswagen Golf IV GTI Edition 25", price: 40000, speed: 145, handling: 35, acceleration: 17, description: "On-Sale; 4 chỗ. (234 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Golf+IV", status: "onsale" },
+        { brand: "Ford", name: "2018 Ford Focus RS", price: 40000, speed: 156, handling: 34, acceleration: 26, description: "On-Sale; AWD.", image: "https://placehold.co/600x400/000000/FF8C00?text=Ford+Focus+RS", status: "onsale" },
+        { brand: "Cadillac", name: "1959 Cadillac Coupe De Ville", price: 45000, speed: 115, handling: 38, acceleration: 31, description: "On-Sale (Licensed); 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+Coupe", status: "onsale" },
+        { brand: "Toyota", name: "2023 Toyota GR86", price: 45000, speed: 140, handling: 36, acceleration: 21, description: "On-Sale; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+GR86", status: "onsale" },
+        { brand: "Jaguar", name: "Jaguar XKR (2012)", price: 0, speed: 186, handling: 38, acceleration: 33, description: "On-Sale (Licensed); RWD; 4 chỗ. Free (formerly $45,000).", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+XKR", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 Sport Classic (997) (2010)", price: 45000, speed: 192, handling: null, acceleration: null, description: "On-Sale; 2 chỗ; Porsche Legends Pack.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+Sport", status: "onsale" },
+        { brand: "Volkswagen", name: "Volkswagen New Beetle (2004)", price: 45000, speed: 127, handling: null, acceleration: null, description: "On-Sale (Licensed); 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Beetle", status: "onsale" },
+
+        // ===== TRANG 2 =====
+        { brand: "Jaguar", name: "Jaguar XKR-S Convertible (2012)", price: 47000, speed: 186, handling: 45, acceleration: 43, description: "On-Sale (Licensed) convertible; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+XKR-S", status: "onsale" },
+        { brand: "Audi", name: "2023 Audi Q3 Sportback", price: 50000, speed: 137, handling: 40, acceleration: 27, description: "On-Sale (Licensed) crossover; 5 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+Q3", status: "onsale" },
+        { brand: "TVR", name: "TVR Griffith 500 (1994)", price: 50000, speed: 166, handling: 54, acceleration: 33, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=TVR+Griffith", status: "onsale" },
+        { brand: "GMC", name: "2024 GMC Savana Ambulance", price: 50911, speed: 145, handling: 35, acceleration: 24, description: "On-Sale light truck; RWD; 7 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=GMC+Ambulance", status: "onsale" },
+        { brand: "GMC", name: "2024 GMC Savana Police", price: 50911, speed: 135, handling: 32, acceleration: 23, description: "On-Sale light truck; RWD; 8 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=GMC+Police", status: "onsale" },
+        { brand: "Cadillac", name: "2011 Cadillac CTS-V Wagon", price: 55000, speed: 184, handling: 49, acceleration: 28, description: "On-Sale estate; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+CTS-V", status: "onsale" },
+        { brand: "Land Rover", name: "2017 Land Rover Range Rover SV Autobiography", price: 55000, speed: 155, handling: 40, acceleration: 26, description: "On-Sale (Licensed) suv; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Range+Rover+SVA", status: "onsale" },
+        { brand: "Volkswagen", name: "2023 Volkswagen Arteon SEL Premium R-Line", price: 55000, speed: 130, handling: 35, acceleration: 26, description: "On-Sale (Licensed) liftback; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Arteon", status: "onsale" },
+        { brand: "Toyota", name: "Toyota Corolla Levin Sprinter Trueno (AE86) (1985)", price: 55000, speed: 112, handling: 35, acceleration: 16, description: "On-Sale (Licensed) coupe; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+AE86", status: "onsale" },
+        { brand: "Audi", name: "Audi A6 Limousine (2024)", price: 58000, speed: 150, handling: null, acceleration: null, description: "On-Sale (Licensed); 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+A6", status: "onsale" },
+        { brand: "Lexus", name: "2009 Lexus IS F", price: 60000, speed: 170, handling: 44, acceleration: 26, description: "On-Sale passenger car; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lexus+IS+F", status: "onsale" },
+        { brand: "Toyota", name: "2021 Toyota GR Yaris", price: 60000, speed: 143, handling: 44, acceleration: 23, description: "On-Sale passenger car; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+GR+Yaris", status: "onsale" },
+        { brand: "Opel", name: "2003 Opel Speedster Turbo", price: 65000, speed: 151, handling: 49, acceleration: 23, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Opel+Speedster", status: "onsale" },
+        { brand: "Audi", name: "2001 Audi RS 4 Avant", price: 66000, speed: 155, handling: 45, acceleration: 24, description: "On-Sale passenger car; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+RS+4", status: "onsale" },
+        { brand: "Volkswagen", name: "2003 Volkswagen Golf IV R32", price: 70000, speed: 145, handling: 35, acceleration: 20, description: "On-Sale passenger car; AWD; 4 chỗ. (234 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Golf+R32", status: "onsale" },
+        { brand: "Pontiac", name: "2010 Pontiac Solstice", price: 70000, speed: 155, handling: 44, acceleration: 38, description: "On-Sale (Licensed) coupe; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pontiac+Solstice", status: "onsale" },
+        { brand: "Volkswagen", name: "2024 Volkswagen Golf VIII GTI 380", price: 70000, speed: 155, handling: 40, acceleration: 23, description: "On-Sale passenger car; FWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Golf+GTI", status: "onsale" },
+        { brand: "Audi", name: "Audi RS 3 Limousine (2023)", price: 70000, speed: 150, handling: null, acceleration: null, description: "On-Sale (Licensed); 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+RS3", status: "onsale" },
+        { brand: "TVR", name: "TVR Cerbera (1999)", price: 70000, speed: 198, handling: 49, acceleration: 39, description: "On-Sale (Licensed) coupe; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=TVR+Cerbera", status: "onsale" },
+        { brand: "Ford", name: "2015 Ford Mustang GT Convertible", price: 72000, speed: 175, handling: 35, acceleration: 26, description: "On-Sale passenger car; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Mustang+GT", status: "onsale" },
+        { brand: "Land Rover", name: "2023 Land Rover Range Rover Velar", price: 74000, speed: 145, handling: 44, acceleration: 30, description: "On-Sale passenger car; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Range+Rover+Velar", status: "onsale" },
+        { brand: "Ford", name: "2011 Ford Crown Victoria LX - Wayfort Police Livery", price: 75000, speed: 115, handling: 42, acceleration: 17, description: "On-Sale passenger car; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Crown+Victoria+Police", status: "onsale" },
+        { brand: "Land Rover", name: "2023 Land Rover Discovery", price: 75000, speed: 140, handling: 42, acceleration: 26, description: "On-Sale (Licensed) suv; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Land+Rover+Discovery", status: "onsale" },
+        { brand: "Jeep", name: "Jeep Grand Cherokee SRT Trackhawk (2018)", price: 79990, speed: 189, handling: null, acceleration: null, description: "On-Sale suv; 5 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jeep+Trackhawk", status: "onsale" },
+
+        // ===== TRANG 3 =====
+        { brand: "Toyota", name: "1996 Toyota Supra Turbo", price: 80000, speed: 155, handling: 39, acceleration: 27, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+Supra+1996", status: "onsale" },
+        { brand: "Ford", name: "2013 Ford Mustang Shelby GT500", price: 80000, speed: 199, handling: 45, acceleration: null, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Mustang+GT500", status: "onsale" },
+        { brand: "Cadillac", name: "2018 Cadillac Escalade Platinum", price: 80000, speed: 120, handling: 38, acceleration: 26, description: "On-Sale passenger car; RWD; 6 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+Escalade", status: "onsale" },
+        { brand: "TVR", name: "TVR Griffith (2018)", price: 87000, speed: 200, handling: 41, acceleration: 41, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=TVR+Griffith+2018", status: "onsale" },
+        { brand: "Land Rover", name: "2023 Land Rover Defender 110", price: 90000, speed: 149, handling: 36, acceleration: 27, description: "On-Sale suv; AWD; 5 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Land+Rover+Defender", status: "onsale" },
+        { brand: "Chevrolet", name: "2024 Chevrolet Tahoe Z71", price: 90000, speed: 124, handling: 31, acceleration: 18, description: "On-Sale passenger car; RWD*; 6 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Chevy+Tahoe", status: "onsale" },
+        { brand: "De Tomaso", name: "De Tomaso Pantera GTS (1974)", price: 90000, speed: 174, handling: 54, acceleration: 41, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=De+Tomaso+Pantera", status: "onsale" },
+        { brand: "McLaren", name: "McLaren MP4-12C Coupe (2014)", price: 90000, speed: 204, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+MP4-12C", status: "onsale" },
+        { brand: "Ford", name: "2018 Ford Mustang Shelby GT350R", price: 95000, speed: 175, handling: 36, acceleration: 28, description: "On-Sale coupe; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Mustang+GT350R", status: "onsale" },
+        { brand: "Audi", name: "Audi RS Q8 (2022)", price: 98000, speed: 155, handling: null, acceleration: null, description: "On-Sale (Licensed) suv; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+RS+Q8", status: "onsale" },
+        { brand: "Cadillac", name: "1967 Cadillac Eldorado", price: 100000, speed: 120, handling: 31, acceleration: 15, description: "On-Sale passenger car; FWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+Eldorado", status: "onsale" },
+        { brand: "Hummer", name: "2009 HUMMER H2", price: 100000, speed: 110, handling: 40, acceleration: 28, description: "On-Sale (Licensed) suv; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Hummer+H2", status: "onsale" },
+        { brand: "Ford", name: "2023 Ford Bronco Raptor", price: 100000, speed: 114, handling: 41, acceleration: 30, description: "On-Sale (Licensed) suv; 5 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Ford+Bronco+Raptor", status: "onsale" },
+        { brand: "Audi", name: "Audi RS 7 Sportback (2021)", price: 107000, speed: 170, handling: 51, acceleration: 32, description: "On-Sale (Licensed) hatchback; AWD; 5 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+RS7", status: "onsale" },
+        { brand: "Chevrolet", name: "2009 Chevrolet Corvette ZR1", price: 110000, speed: 205, handling: 41, acceleration: 47, description: "On-Sale (Licensed) coupe; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Corvette+ZR1", status: "onsale" },
+        { brand: "Lexus", name: "2020 Lexus LC 500", price: 110000, speed: 160, handling: 45, acceleration: 28, description: "On-Sale passenger car; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lexus+LC+500", status: "onsale" },
+        { brand: "Lotus", name: "2022 Lotus Emira", price: 110000, speed: 179, handling: 55, acceleration: 28, description: "On-Sale passenger car; RWD; 2 chỗ. (289 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Lotus+Emira", status: "onsale" },
+        { brand: "Volkswagen", name: "2024 Volkswagen Touareg R eHybrid", price: 110000, speed: 155, handling: 42, acceleration: 24, description: "On-Sale passenger car; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Touareg", status: "onsale" },
+        { brand: "McLaren", name: "McLaren MP4-12C Spider (2012)", price: 115000, speed: 204, handling: null, acceleration: null, description: "On-Sale (Licensed); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+MP4-12C+Spider", status: "onsale" },
+        { brand: "Chevrolet", name: "2023 Chevrolet Camaro SS Convertible", price: 0, speed: 180, handling: 45, acceleration: 44, description: "On-Sale (Licensed) convertible; 4 chỗ. Free (formerly $120,000).", image: "https://placehold.co/600x400/000000/FF8C00?text=Camaro+SS", status: "onsale" },
+        { brand: "Audi", name: "Audi RS 6 Avant (2024)", price: 120000, speed: 174, handling: 39, acceleration: 37, description: "On-Sale wagon; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+RS6", status: "onsale" },
+        { brand: "Toyota", name: "Toyota GR Supra (2020)", price: 120000, speed: 155, handling: 29, acceleration: null, description: "On-Sale coupe; RWD; 2 chỗ. Acceleration: 3.6s.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+GR+Supra", status: "onsale" },
+        { brand: "Opel", name: "2016 Opel Astra TCR", price: 125000, speed: 162, handling: 58, acceleration: 21, description: "On-Sale race car; RWD; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Opel+Astra+TCR", status: "onsale" },
+
+        // ===== TRANG 4 =====
+        { brand: "Cadillac", name: "2024 Cadillac Escalade-V", price: 130000, speed: 124, handling: 32, acceleration: 31, description: "On-Sale passenger car; AWD; 6 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+Escalade-V", status: "onsale" },
+        { brand: "Lotus", name: "Lotus Esprit Turbo (X180) (1988)", price: 130000, speed: 160, handling: 32, acceleration: 22, description: "On-Sale (Licensed) 2-door coupé; RWD; 2 chỗ. (257 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Lotus+Esprit", status: "onsale" },
+        { brand: "Nissan", name: "2017 Nissan GT-R", price: 135000, speed: 191, handling: 44, acceleration: 42, description: "On-Sale passenger car; AWD; 4 chỗ. (307 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Nissan+GT-R", status: "onsale" },
+        { brand: "TVR", name: "TVR Sagaris (2005)", price: 135000, speed: 193, handling: 44, acceleration: 43, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=TVR+Sagaris", status: "onsale" },
+        { brand: "Audi", name: "Audi R8 LMS ultra (2014)", price: 140000, speed: 207, handling: 50, acceleration: 39, description: "On-Sale + Track Pass Gamepass (Licensed) race car; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+R8+LMS", status: "onsale" },
+        { brand: "Ford", name: "Ford Mustang Dark Horse (2024)", price: 140000, speed: 157, handling: 52, acceleration: 43, description: "On-Sale (Licensed) muscle; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Mustang+Dark+Horse", status: "onsale" },
+        { brand: "Jaguar", name: "Jaguar E-Type Roadster (1961)", price: 140000, speed: 149, handling: null, acceleration: null, description: "On-Sale (Licensed); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+E-Type", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 718 Boxster S (2016)", price: 0, speed: 182, handling: 49, acceleration: 38, description: "On-Sale convertible; RWD; 2 chỗ. Free (formerly $140,000).", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+718", status: "onsale" },
+        { brand: "Land Rover", name: "Range Rover Sport SVR (2021)", price: 140000, speed: 176, handling: null, acceleration: null, description: "On-Sale (Licensed) suv; 5 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Range+Rover+SVR", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 570S Coupe (2015)", price: 145000, speed: 204, handling: 42, acceleration: 36, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+570S", status: "onsale" },
+        { brand: "McLaren", name: "2014 McLaren 650S", price: 150000, speed: 207, handling: 44, acceleration: 45, description: "On-Sale (Licensed) coupe; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+650S", status: "onsale" },
+        { brand: "Ford", name: "Ford F-150 Raptor R (2023)", price: 150000, speed: 113, handling: null, acceleration: null, description: "On-Sale (Licensed); (183 KMH)", image: "https://placehold.co/600x400/000000/FF8C00?text=Ford+F-150", status: "onsale" },
+        { brand: "Audi", name: "Audi TT RS Coupé (2022)", price: 160000, speed: 205, handling: null, acceleration: null, description: "On-Sale (Licensed); 4 chỗ. Free for new users.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+TT+RS", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 Targa 4S (2021)", price: 160000, speed: 188, handling: 43, acceleration: 30, description: "On-Sale (Licensed) targa-top coupe; AWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+Targa", status: "onsale" },
+        { brand: "Noble", name: "Noble M600 (2010)", price: 165000, speed: 225, handling: 49, acceleration: 54, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ. Free for new users.", image: "https://placehold.co/600x400/000000/FF8C00?text=Noble+M600", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 718 Cayman GT4 RS (2024)", price: 176204, speed: 196, handling: 60, acceleration: 38, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT4+RS", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 GT3 (992.1) (2022)", price: 178960, speed: 198, handling: 48, acceleration: 37, description: "On-Sale coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT3", status: "onsale" },
+        { brand: "Aprilia", name: "Aprilia RS 660 Factory (2020)", price: 185000, speed: 148, handling: 46, acceleration: 34, description: "On-Sale (Licensed) motorcycle; 1 chỗ. (239 KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Aprilia+RS+660", status: "onsale" },
+        { brand: "KTM", name: "KTM X-BOW GT (2013)", price: 185000, speed: 144, handling: 63, acceleration: 39, description: "On-Sale (Licensed) speedster; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=KTM+X-BOW", status: "onsale" },
+        { brand: "Chevrolet", name: "2019 Chevrolet Corvette C7 ZR1", price: 190000, speed: 212, handling: 52, acceleration: null, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Corvette+ZR1", status: "onsale" },
+        { brand: "Lotus", name: "2008 Lotus Elise", price: 195000, speed: 149, handling: null, acceleration: null, description: "On-Sale (Licensed); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lotus+Elise", status: "onsale" },
+        { brand: "Porsche", name: "Porsche Taycan Turbo S (2024)", price: 195000, speed: 184, handling: 49, acceleration: 32, description: "On-Sale (Licensed) sedan; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+Taycan", status: "onsale" },
+        { brand: "Audi", name: "Audi R8 GT Spyder (2022)", price: 196000, speed: 197, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+R8+GT", status: "onsale" },
+        { brand: "Chevrolet", name: "Chevrolet Corvette C8 (2020)", price: 200000, speed: 194, handling: 54, acceleration: 47, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ. (Earned from Collection)", image: "https://placehold.co/600x400/000000/FF8C00?text=Corvette+C8", status: "onsale" },
+
+        // ===== TRANG 5 =====
+        { brand: "Porsche", name: "Porsche 911 GT3 RS (2018)", price: 210500, speed: 193, handling: 43, acceleration: 37, description: "On-Sale coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT3+RS", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 600LT Coupe (2019)", price: 220000, speed: 204, handling: 38, acceleration: 41, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+600LT", status: "onsale" },
+        { brand: "Noble", name: "Noble M500 (2022)", price: 220000, speed: 200, handling: 63, acceleration: 44, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Noble+M500", status: "onsale" },
+        { brand: "McLaren", name: "McLaren Artura (2023)", price: 230000, speed: 205, handling: 42, acceleration: 49, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+Artura", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 600LT Spider (2020)", price: 240000, speed: 200, handling: 36, acceleration: 44, description: "On-Sale (Licensed) convertible coupe; RWD; 2 chỗ. (323 KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+600LT+Spider", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 720S Coupe (2017)", price: 245000, speed: 212, handling: 45, acceleration: 48, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+720S", status: "onsale" },
+        { brand: "Hummer", name: "2006 Hummer H1", price: 250000, speed: 105, handling: 36, acceleration: 25, description: "On-Sale (Licensed) suv; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Hummer+H1", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 675LT Coupe (2015)", price: 265000, speed: 205, handling: 45, acceleration: 46, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+675LT", status: "onsale" },
+        { brand: "Aston Martin", name: "Aston Martin DBS Superleggera Coupe (2020)", price: null, speed: 211, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ. (formerly $274,800)", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+DBS", status: "onsale" },
+        { brand: "Aston Martin", name: "2024 Aston Martin DB12", price: 280000, speed: 202, handling: 56, acceleration: 33, description: "On-Sale; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+DB12", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 720S Spider (2020)", price: 280000, speed: 212, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+720S+Spider", status: "onsale" },
+        { brand: "Noble", name: "Noble M600 Speedster (2016)", price: 280000, speed: 232, handling: 49, acceleration: 57, description: "On-Sale (Licensed) targa; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Noble+M600+Speedster", status: "onsale" },
+        { brand: "Bentley", name: "2017 Bentley Continental Supersports", price: 290000, speed: 209, handling: 45, acceleration: 29, description: "On-Sale (Licensed) coupe.", image: "https://placehold.co/600x400/000000/FF8C00?text=Bentley+Continental", status: "onsale" },
+        { brand: "KTM", name: "KTM X-BOW GT4 Evo", price: 290000, speed: 164, handling: 68, acceleration: 37, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=KTM+X-BOW+GT4", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 675LT Spider (2016)", price: 293000, speed: 205, handling: 47, acceleration: 38, description: "On-Sale (Licensed) convertible; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+675LT+Spider", status: "onsale" },
+        { brand: "Aprilia", name: "2025 Aprilia Tuono V4 Factory 1100", price: 295000, speed: 173, handling: 55, acceleration: 38, description: "On-Sale motorbike; RWD; 1 chỗ. (279 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Aprilia+Tuono", status: "onsale" },
+        { brand: "Ford", name: "2025 Ford Mustang GTD", price: 325000, speed: 202, handling: 62, acceleration: 46, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ. (325 KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Mustang+GTD", status: "onsale" },
+        { brand: "Land Rover", name: "Land Rover Defender 110 (1992)", price: 340000, speed: 140, handling: 39, acceleration: 26, description: "On-Sale (Licensed) 4x4; AWD; 8 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Land+Rover+Defender+1992", status: "onsale" },
+        { brand: "McLaren", name: "2023 McLaren 750S Coupe", price: 350000, speed: 210, handling: 45, acceleration: 44, description: "On-Sale (Licensed) coupe; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+750S", status: "onsale" },
+        { brand: "Bentley", name: "2023 Bentley Flying Spur Speed Edition 12", price: 370000, speed: 207, handling: 42, acceleration: 30, description: "On-Sale (Licensed) sedan; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Bentley+Flying+Spur", status: "onsale" },
+        { brand: "KTM", name: "KTM X-BOW GTX (2020)", price: 370000, speed: 200, handling: 73, acceleration: 51, description: "On-Sale (Licensed) coupe; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=KTM+X-BOW+GTX", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 GT3 RS (997.2)", price: 390000, speed: 193, handling: 40, acceleration: 31, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT3+RS+997", status: "onsale" },
+        { brand: "Toyota", name: "2019 Toyota GR Supra GT4 Concept", price: 400000, speed: 0, handling: null, acceleration: null, description: "On-Sale race car; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+Supra+GT4", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 GT2 RS (2018)", price: 400000, speed: 211, handling: 47, acceleration: 49, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT2+RS", status: "onsale" },
+
+        // ===== TRANG 6 =====
+        { brand: "Porsche", name: "Porsche 911 Raceborn", price: 400000, speed: 183, handling: 50, acceleration: 30, description: "On-Sale passenger car; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+Raceborn", status: "onsale" },
+        { brand: "Aston Martin", name: "2023 Aston Martin V12 Vantage", price: 450000, speed: 200, handling: 49, acceleration: 34, description: "On-Sale passenger car; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+V12+Vantage", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 765LT (2020)", price: 460000, speed: 205, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+765LT", status: "onsale" },
+        { brand: "Aston Martin", name: "Aston Martin DBS (2008)", price: 475000, speed: 211, handling: null, acceleration: null, description: "On-Sale (Licensed); 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+DBS+2008", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 GT3 RS (2023)", price: 480000, speed: 184, handling: 49, acceleration: 69, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT3+RS+2023", status: "onsale" },
+        { brand: "Audi", name: "Audi R8 GT (2012)", price: 500000, speed: 198, handling: null, acceleration: null, description: "On-Sale (Collection Vehicle) (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+R8+GT", status: "onsale" },
+        { brand: "KTM", name: "KTM RC 8C (2023)", price: 500000, speed: 165, handling: 46, acceleration: 42, description: "On-Sale and Track-Pass Required (Licensed) motorcycle; 1 chỗ. (265KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=KTM+RC+8C", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 765LT Spider (2022)", price: 520000, speed: 204, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+765LT+Spider", status: "onsale" },
+        { brand: "Ford", name: "Ford GT (2006)", price: 550000, speed: 205, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Ford+GT+2006", status: "onsale" },
+        { brand: "Lamborghini", name: "Lamborghini Veneno (2014)", price: 600000, speed: 221, handling: 63, acceleration: null, description: "On-Sale (Licensed) coupe; AWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lamborghini+Veneno", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 Speedster (2019)", price: 600000, speed: 192, handling: 49, acceleration: 58, description: "On-Sale (Collection Car) convertible; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+Speedster", status: "onsale" },
+        { brand: "Porsche", name: "Porsche Carrera GT (2006)", price: 659000, speed: 208, handling: 44, acceleration: 36, description: "On-Sale targa-top coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+Carrera+GT", status: "onsale" },
+        { brand: "Ford", name: "Ford RS200 (1986)", price: 699699, speed: 167, handling: null, acceleration: null, description: "On-Sale; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Ford+RS200", status: "onsale" },
+        { brand: "Lexus", name: "2010 Lexus LFA", price: 700000, speed: 202, handling: 66, acceleration: 32, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lexus+LFA", status: "onsale" },
+        { brand: "SSC", name: "SSC Ultimate Aero TT (2009)", price: 700000, speed: 258, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=SSC+Ultimate+Aero", status: "onsale" },
+        { brand: "Gumpert", name: "2008 Gumpert Apollo", price: 750000, speed: 223, handling: 50, acceleration: null, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Gumpert+Apollo", status: "onsale" },
+        { brand: "Lamborghini", name: "2010 Lamborghini Murcielago LP 670 SV", price: 850000, speed: 212, handling: 59, acceleration: 36, description: "On-Sale passenger car; AWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Murcielago+SV", status: "onsale" },
+        { brand: "TVR", name: "TVR Cerbera Speed 12 (2000)", price: 850000, speed: 240, handling: 64, acceleration: 50, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=TVR+Speed+12", status: "onsale" },
+        { brand: "Gumpert", name: "Gumpert Apollo Sport (2008)", price: 890000, speed: 224, handling: 48, acceleration: 41, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Gumpert+Apollo+Sport", status: "onsale" },
+        { brand: "De Tomaso", name: "De Tomaso P72 (2019)", price: 935460, speed: 221, handling: null, acceleration: null, description: "On-Sale supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=De+Tomaso+P72", status: "onsale" },
+        { brand: "Ford", name: "Ford GT (2017)", price: 1050000, speed: 216, handling: null, acceleration: null, description: "On-Sale (Collection Car) (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Ford+GT+2017", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 720S GT3X (2021)", price: 1200000, speed: 220, handling: 59, acceleration: 53, description: "On-Sale (Collection Car) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+720S+GT3X", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Zonda F (2005)", price: 1200000, speed: 214, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Zonda+F", status: "onsale" },
+
+        // ===== TRANG 7 =====
+        { brand: "Zenvo", name: "Zenvo TS1 GT (2017)", price: 1200000, speed: 233, handling: 55, acceleration: 51, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Zenvo+TS1+GT", status: "onsale" },
+        { brand: "McLaren", name: "McLaren Senna (2018)", price: 1300000, speed: 215, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+Senna", status: "onsale" },
+        { brand: "Porsche", name: "2026 Porsche 911 GT3 R", price: 1400000, speed: 186, handling: 56, acceleration: 38, description: "On-Sale vehicle; RWD; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+GT3+R", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Zonda C12 (1999)", price: 1400000, speed: 208, handling: null, acceleration: null, description: "On-Sale (Collection Car) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Zonda+C12", status: "onsale" },
+        { brand: "Aston Martin", name: "Aston Martin Valhalla (2025)", price: null, speed: 207, handling: null, acceleration: null, description: "On-Sale (Collection Vehicle) hypercar; 2 chỗ. Aston Martin Collection (formerly $1,482,828).", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+Valhalla", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Zonda F Roadster (2006)", price: 1570000, speed: 214, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Zonda+F+Roadster", status: "onsale" },
+        { brand: "Lamborghini", name: "2019 Lamborghini Aventador SVJ", price: 1600000, speed: 217, handling: 44, acceleration: 52, description: "On-Sale passenger car; AWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lamborghini+SVJ", status: "onsale" },
+        { brand: "McLaren", name: "McLaren P1™ (2015)", price: 1600000, speed: 217, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+P1", status: "onsale" },
+        { brand: "Bentley", name: "2020 Bentley Mulliner Bacalar", price: 1700000, speed: 200, handling: 52, acceleration: 33, description: "On-Sale (Licensed) barchetta; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Bentley+Bacalar", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 918 Spyder (2015)", price: 1750000, speed: 214, handling: 60, acceleration: 44, description: "On-Sale (Licensed) hypercar; AWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+918", status: "onsale" },
+        { brand: "Gordon Murray", name: "Gordon Murray Automotive T.33 (2024)", price: 1875000, speed: 208, handling: 62, acceleration: 38, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=GMA+T33", status: "onsale" },
+        { brand: "Jaguar", name: "Jaguar XJR-15 (1991)", price: 1900000, speed: 191, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+XJR-15", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Huayra (2011)", price: 1900000, speed: 230, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Huayra", status: "onsale" },
+        { brand: "W Motors", name: "W Motors Fenyr SuperSport (2022)", price: 1900000, speed: 248, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ. (Speed in mph).", image: "https://placehold.co/600x400/000000/FF8C00?text=W+Motors+Fenyr", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Utopia (2023)", price: 1950000, speed: 237, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Utopia", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 959 (1988)", price: 1968953, speed: 197, handling: 49, acceleration: 39, description: "On-Sale coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+959", status: "onsale" },
+        { brand: "Hennessey", name: "2011 Hennessey Venom GT", price: 2000000, speed: 270, handling: 60, acceleration: null, description: "On-Sale super car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Hennessey+Venom", status: "onsale" },
+        { brand: "Pininfarina", name: "Pininfarina B95 (2023)", price: 2000000, speed: 186, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pininfarina+B95", status: "onsale" },
+        { brand: "Jaguar", name: "Jaguar XJ220 S (1994)", price: 2500000, speed: 220, handling: 56, acceleration: 56, description: "On-Sale (Collection Car) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+XJ220", status: "onsale" },
+        { brand: "Zenvo", name: "Zenvo TSR-S (2020)", price: 2550000, speed: 202, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Zenvo+TSR-S", status: "onsale" },
+        { brand: "Apollo", name: "Apollo Arrow (2017)", price: 2600000, speed: 225, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Apollo+Arrow", status: "onsale" },
+        { brand: "Pininfarina", name: "Pininfarina Battista (2019)", price: 2600000, speed: 217, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pininfarina+Battista", status: "onsale" },
+        { brand: "Czinger", name: "Czinger 21C (2021)", price: 2800000, speed: 281, handling: 52, acceleration: 56, description: "On-Sale (Licensed) hypercar; 2 chỗ. (452 KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Czinger+21C", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Huayra Roadster (2017)", price: 2800000, speed: 229, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Huayra+Roadster", status: "onsale" },
+
+        // ===== TRANG 8 =====
+        { brand: "Gordon Murray", name: "Gordon Murray Automotive T.50 (2020)", price: 2900000, speed: 226, handling: 69, acceleration: 65, description: "On-Sale (Licensed) coupe; RWD; 3 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=GMA+T50", status: "onsale" },
+        { brand: "McLaren", name: "McLaren Speedtail (2020)", price: 2900000, speed: 250, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 3 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+Speedtail", status: "onsale" },
+        { brand: "Lamborghini", name: "Lamborghini Countach LPI 800-4 (2022)", price: 3000000, speed: 221, handling: 61, acceleration: null, description: "On-Sale (Licensed) coupe; AWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Countach+LPI", status: "onsale" },
+        { brand: "Lotus", name: "Lotus Elise GT1 (1997)", price: 3000000, speed: 199, handling: 53, acceleration: 31, description: "On-Sale and Track Pass (Licensed); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lotus+Elise+GT1", status: "onsale" },
+        { brand: "SSC", name: "SSC Tuatara (2020)", price: 3100000, speed: 283, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=SSC+Tuatara", status: "onsale" },
+        { brand: "Aston Martin", name: "Aston Martin Vulcan (2016)", price: 3400000, speed: 217, handling: 63, acceleration: 39, description: "On-Sale (Track Pass) (Licensed) hypercar; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+Vulcan", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Huayra BC (2016)", price: 3500000, speed: 238, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Huayra+BC", status: "onsale" },
+        { brand: "Koenigsegg", name: "2007 Koenigsegg CCXR", price: 3850000, speed: 254, handling: 45, acceleration: 39, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Koenigsegg+CCXR", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Zonda Cinque Roadster", price: 4250000, speed: 220, handling: null, acceleration: null, description: "On-Sale (Licensed); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Zonda+Cinque+Roadster", status: "onsale" },
+        { brand: "Lotus", name: "Lotus Evija (2021)", price: 4350000, speed: 217, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lotus+Evija", status: "onsale" },
+        { brand: "Pagani", name: "2020 Pagani Huayra Tricolore", price: 5000000, speed: 232, handling: 53, acceleration: 44, description: "On-Sale passenger car; RWD; 2 chỗ. (374 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Huayra+Tricolore", status: "onsale" },
+        { brand: "Gordon Murray", name: "Gordon Murray Automotive T.50s Niki Lauda (2021)", price: 5000000, speed: 230, handling: 72, acceleration: 66, description: "On-Sale (Licensed) coupe; RWD; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=GMA+T50s", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Zonda Revolución (2013)", price: 5400000, speed: 220, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Zonda+Revolucion", status: "onsale" },
+        { brand: "SSC", name: "SSC Tuatara Striker (2023)", price: 5500000, speed: 295, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=SSC+Striker", status: "onsale" },
+        { brand: "Pagani", name: "2020 Pagani Imola", price: 6000000, speed: 217, handling: 52, acceleration: 38, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Imola", status: "onsale" },
+        { brand: "Jaguar", name: "Jaguar D-Type (1954)", price: 6000000, speed: 172, handling: 41, acceleration: 44, description: "On-Sale (Licensed) roadster; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+D-Type", status: "onsale" },
+        { brand: "SSC", name: "SSC Tuatara Aggressor (2023)", price: 6000000, speed: 295, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=SSC+Aggressor", status: "onsale" },
+        { brand: "Hennessey", name: "Hennessey Venom F5 Revolution 'Coupe' (2023)", price: 7200000, speed: 310, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Venom+F5+Revolution", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Huayra R (2021)", price: 7500000, speed: 218, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pagani+Huayra+R", status: "onsale" },
+        { brand: "De Tomaso", name: "De Tomaso P900 (2024)", price: 7800000, speed: 235, handling: 70, acceleration: 56, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=De+Tomaso+P900", status: "onsale" },
+        { brand: "Hennessey", name: "2025 Hennessey Venom F5-M Roadster", price: 8200000, speed: 310, handling: 66, acceleration: 37, description: "On-Sale roadster; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Venom+F5-M", status: "onsale" },
+        { brand: "Koenigsegg", name: "2019 Koenigsegg Regera", price: 8500000, speed: 247, handling: 64, acceleration: 73, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Koenigsegg+Regera", status: "onsale" },
+        { brand: "Hennessey", name: "Hennessey Venom F5 (2021)", price: 8500000, speed: 310, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Venom+F5", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Zonda HP Barchetta (2017)", price: 8500000, speed: 220, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Zonda+HP", status: "onsale" },
+
+        // ===== TRANG 9 =====
+        { brand: "McLaren", name: "McLaren Solus GT (2023)", price: 9000000, speed: 209, handling: 68, acceleration: 43, description: "On-Sale (Licensed) track day car; 1 chỗ. (337KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+Solus", status: "onsale" },
+        { brand: "Zenvo", name: "Zenvo Aurora Agil (2025)", price: 9500000, speed: 335, handling: 65, acceleration: 60, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Zenvo+Aurora", status: "onsale" },
+        { brand: "Devel", name: "Devel Sixteen (2024)", price: 12000000, speed: 319, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Devel+Sixteen", status: "onsale" },
+        { brand: "Audi", name: "Audi R18 Ultra (2012)", price: 12500000, speed: 211, handling: 65, acceleration: 69, description: "On-Sale (Licensed) Le Mans Prototype; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+R18", status: "onsale" },
+        { brand: "Koenigsegg", name: "Koenigsegg Jesko Absolut (2023)", price: 13000000, speed: 320, handling: 56, acceleration: 44, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jesko+Absolut", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Zonda Revolucion Barchetta (2019)", price: 13500000, speed: 220, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Zonda+Barchetta", status: "onsale" },
+        { brand: "Koenigsegg", name: "2025 Koenigsegg Sadair's Spear", price: 15000000, speed: 329, handling: 66, acceleration: 43, description: "On-Sale (Track Pass Required) (Licensed) hypercar; RWD; 2 chỗ. (530KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Koenigsegg+Sadair", status: "onsale" },
+        { brand: "Volkswagen", name: "1963 Volkswagen T2 TI", price: null, speed: 0, handling: null, acceleration: null, description: "On-Sale (Licensed) van.", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+T2", status: "onsale" },
+        { brand: "Pontiac", name: "1986 Pontiac Firebird GTA", price: 0, speed: 145, handling: 35, acceleration: 18, description: "On-Sale passenger car; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Pontiac+Firebird", status: "onsale" },
+        { brand: "Ultima", name: "2015 Ultima EVO Coupe", price: null, speed: 0, handling: null, acceleration: null, description: "On-Sale passenger car; RWD; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Ultima+EVO", status: "onsale" },
+        { brand: "Nissan", name: "2022 Nissan Frontier (D41)", price: 0, speed: 112, handling: 32, acceleration: 18, description: "On-Sale pickup truck; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Nissan+Frontier", status: "onsale" },
+        { brand: "Nissan", name: "2025 Nissan Altima", price: 0, speed: 140, handling: 35, acceleration: 17, description: "On-Sale passenger car; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Nissan+Altima", status: "onsale" },
+        { brand: "Audi", name: "Audi A4 Limousine (2013)", price: 0, speed: 140, handling: 26, acceleration: 20, description: "On-Sale (Licensed) sedan; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+A4", status: "onsale" },
+        { brand: "Citroën", name: "Citroën Ami (2024)", price: 0, speed: 28, handling: 29, acceleration: 12, description: "On-Sale (Licensed) 2-door quadricycle; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Citroen+Ami", status: "onsale" },
+        { brand: "Fairway", name: "Fairway Zoomer (2023)", price: null, speed: 70, handling: null, acceleration: null, description: "On-Sale, through code; 4 chỗ. Code: ZOOM", image: "https://placehold.co/600x400/000000/FF8C00?text=Fairway+Zoomer", status: "onsale" },
+        { brand: "Gumpert", name: "Gumpert Apollo N (2016)", price: null, speed: 223, handling: 63, acceleration: 47, description: "On-Sale (Collection Car) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Gumpert+Apollo+N", status: "onsale" },
+        { brand: "McLaren", name: "McLaren 750S Spider (2024)", price: null, speed: 210, handling: 45, acceleration: 48, description: "On-Sale (Collection Car) targa-top; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+750S+Spider", status: "onsale" },
+        { brand: "McLaren", name: "McLaren Artura GT4 (2022)", price: null, speed: 214, handling: 50, acceleration: 50, description: "On-Sale (Licensed) supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+Artura+GT4", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 Carrera 4S Coupé (993)", price: null, speed: 162, handling: 49, acceleration: 28, description: "On-Sale (Licensed) coupe; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+993", status: "onsale" },
+        { brand: "Porsche", name: "Porsche Macan Electric (2025)", price: null, speed: 160, handling: 52, acceleration: 37, description: "On-Sale (Licensed) suv. (259 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+Macan", status: "onsale" },
+        { brand: "Renault", name: "Renault Clio R.S. III (2010)", price: 0, speed: 138, handling: 35, acceleration: 19, description: "On-Sale (Licensed) hatchback; FWD; 4 chỗ. (222 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Renault+Clio", status: "onsale" },
+        { brand: "Aston Martin", name: "Aston Martin Rapide AMR (2018)", price: null, speed: 205, handling: null, acceleration: null, description: "Onsale (Licensed); 4 chỗ. 1200 Robux.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+Rapide", status: "onsale" },
+        { brand: "Cadillac", name: "2013 Cadillac XTS Limousine", price: null, speed: 140, handling: 45, acceleration: 20, description: "Licensed limousine. (225KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+XTS", status: "onsale" },
+
+        // ===== TRANG 10 =====
+        { brand: "Volkswagen", name: "1976 Volkswagen Golf GTI", price: 50000, speed: 112, handling: 30, acceleration: 15, description: "Collection passenger car; FWD; 4 chỗ. (181 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Golf+GTI+1976", status: "onsale" },
+        { brand: "Jaguar", name: "2012 Jaguar XKR-S Coupe", price: 65000, speed: 186, handling: 39, acceleration: 33, description: "Licensed coupe; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+XKR-S+Coupe", status: "onsale" },
+        { brand: "Alfa Romeo", name: "2022 Alfa Romeo Giulia Quadrifoglio", price: 150000, speed: 191, handling: null, acceleration: null, description: "Licensed sedan; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Alfa+Giulia", status: "onsale" },
+        { brand: "McLaren", name: "McLaren GT (2019)", price: 170000, speed: 203, handling: 40, acceleration: null, description: "Licensed supercar; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+GT", status: "onsale" },
+        { brand: "Nissan", name: "1996 Nissan Skyline GT-R (R33)", price: 180000, speed: 171, handling: 45, acceleration: null, description: "Collection passenger car; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Nissan+R33", status: "onsale" },
+        { brand: "Toyota", name: "2021 Toyota GR Supra Open Top Concept", price: 350000, speed: 160, handling: 66, acceleration: 33, description: "Collectible passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Toyota+Supra+Open+Top", status: "onsale" },
+        { brand: "Aston Martin", name: "2026 Aston Martin DBX S", price: 380000, speed: 193, handling: 45, acceleration: 37, description: "Licensed passenger car; 4 chỗ. (310KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+DBX+S", status: "onsale" },
+        { brand: "De Tomaso", name: "De Tomaso Pantera Si (1991)", price: 430000, speed: 165, handling: null, acceleration: null, description: "Onsale vehicle; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=De+Tomaso+Pantera+Si", status: "onsale" },
+        { brand: "Cadillac", name: "2016 Cadillac ATS-V.R GT3", price: 450000, speed: 180, handling: 50, acceleration: 33, description: "Collectible racing car; RWD; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+ATS-V", status: "onsale" },
+        { brand: "Porsche", name: "Porsche 911 GT2 RS (2011)", price: 699997, speed: 193, handling: null, acceleration: null, description: "Driving Empire supercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+GT2+RS+2011", status: "onsale" },
+        { brand: "Ford", name: "2020 Ford Mustang Shelby GT500", price: 750000, speed: 180, handling: 63, acceleration: null, description: "Collectible passenger car; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Mustang+GT500+2020", status: "onsale" },
+        { brand: "Audi", name: "2022 Audi R8 LMS GT3 evo II", price: 900000, speed: 215, handling: 58, acceleration: 62, description: "Collectible racing car; RWD; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+R8+LMS+GT3", status: "onsale" },
+        { brand: "Ford", name: "Ford GT MK II (2020)", price: 1500000, speed: 216, handling: null, acceleration: null, description: "Onsale (Licensed); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Ford+GT+MK+II", status: "onsale" },
+        { brand: "Chevrolet", name: "2023 Chevrolet Camaro ZL1", price: null, speed: 198, handling: 45, acceleration: 48, description: "Licensed coupe; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Camaro+ZL1", status: "onsale" },
+        { brand: "Chevrolet", name: "2024 Chevrolet Corvette Z06 Convertible", price: null, speed: 194, handling: 61, acceleration: 51, description: "Licensed convertible; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Corvette+Z06", status: "onsale" },
+        { brand: "Aston Martin", name: "Aston Martin Vanquish (2025)", price: null, speed: 0, handling: null, acceleration: null, description: "Licensed.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+Vanquish", status: "onsale" },
+        { brand: "Aston Martin", name: "Aston Martin Vantage GT4 (2019)", price: null, speed: 0, handling: null, acceleration: null, description: "Licensed.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+Vantage+GT4", status: "onsale" },
+        { brand: "Box Truck", name: "Box Truck", price: null, speed: 41, handling: null, acceleration: null, description: "Driving Empire box truck; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Box+Truck", status: "onsale" },
+        { brand: "Lamborghini", name: "Lamborghini Temerario GT3 (2025)", price: null, speed: 210, handling: null, acceleration: null, description: "Onsale (Licensed); 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Temerario+GT3", status: "onsale" },
+        { brand: "Lotus", name: "Lotus Exige Cup 430 (2021)", price: 350000, speed: 180, handling: null, acceleration: null, description: "On-Sale (Licensed); 2 chỗ. (Subscription Exclusive)", image: "https://placehold.co/600x400/000000/FF8C00?text=Lotus+Exige", status: "onsale" },
+        { brand: "NASCAR", name: "NASCAR Chevrolet Camaro ZL1 (2026)", price: null, speed: 211, handling: 52, acceleration: 36, description: "On-Sale (Licensed); 1 chỗ. (500 Trophies)", image: "https://placehold.co/600x400/000000/FF8C00?text=NASCAR+Camaro", status: "onsale" },
+        { brand: "NASCAR", name: "NASCAR Craftsman Truck Series Chevrolet Silverado RST (2026)", price: null, speed: 211, handling: 52, acceleration: 36, description: "On-Sale (Licensed); 1 chỗ. (500 Trophies)", image: "https://placehold.co/600x400/000000/FF8C00?text=NASCAR+Silverado", status: "onsale" },
+        { brand: "NASCAR", name: "NASCAR Craftsman Truck Series Ford F-150 (2026)", price: null, speed: 211, handling: 52, acceleration: 36, description: "On-Sale (Licensed); 1 chỗ. (500 Trophies)", image: "https://placehold.co/600x400/000000/FF8C00?text=NASCAR+F150", status: "onsale" },
+        { brand: "NASCAR", name: "NASCAR Toyota Camry XSE (2026)", price: null, speed: 211, handling: 52, acceleration: 36, description: "On-Sale (Licensed); 1 chỗ. (500 Trophies)", image: "https://placehold.co/600x400/000000/FF8C00?text=NASCAR+Camry", status: "onsale" },
+
+        // ===== TRANG 11 =====
+        { brand: "McLaren", name: "McLaren 620R (2019)", price: 300000, speed: 210, handling: 56, acceleration: 42, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+620R", status: "onsale" },
+        { brand: "De Tomaso", name: "De Tomaso Pantera GT5-S (1985)", price: null, speed: 150, handling: null, acceleration: null, description: "On-Sale (Licensed); 2 chỗ. (2020 Halloween Event)", image: "https://placehold.co/600x400/000000/FF8C00?text=Pantera+GT5-S", status: "onsale" },
+        { brand: "Chevrolet", name: "Chevrolet El Camino SS (1970)", price: 50000, speed: 140, handling: 29, acceleration: null, description: "Onsale (Licensed) coupe utility; AWD; 2 chỗ. (2020 Halloween Event)", image: "https://placehold.co/600x400/000000/FF8C00?text=El+Camino+SS", status: "onsale" },
+        { brand: "Audi", name: "Audi Sport Quattro S1 (1984)", price: 125000, speed: 155, handling: null, acceleration: null, description: "On-Sale (Licensed); 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+Quattro+S1", status: "onsale" },
+        { brand: "Jaguar", name: "1993 Jaguar XJ220", price: 650000, speed: 212, handling: 45, acceleration: 31, description: "On-Sale passenger car; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+XJ220", status: "onsale" },
+        { brand: "Jaguar", name: "Jaguar C-X75 (2011)", price: 1300000, speed: 205, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+C-X75", status: "onsale" },
+        { brand: "Lamborghini", name: "Lamborghini Revuelto (2024)", price: 3000000, speed: 221, handling: 56, acceleration: 49, description: "On-Sale (Licensed) coupe; AWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Revuelto", status: "onsale" },
+        { brand: "Gumpert", name: "Gumpert Apollo Enraged (2013)", price: 3200000, speed: 227, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Gumpert+Enraged", status: "onsale" },
+        { brand: "W Motors", name: "W Motors Lykan HyperSport (2016)", price: 3400000, speed: 245, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lykan+HyperSport", status: "onsale" },
+        { brand: "Aston Martin", name: "Aston Martin Valkyrie (2021)", price: 4500000, speed: 250, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+Valkyrie", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Huayra Codalunga (2022)", price: 6800000, speed: 230, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Huayra+Codalunga", status: "onsale" },
+        { brand: "Koenigsegg", name: "Koenigsegg Gemera (2024)", price: 7000000, speed: 250, handling: 70, acceleration: 42, description: "On-Sale (Licensed) coupe; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Gemera", status: "onsale" },
+        { brand: "Apollo", name: "Apollo Project Evo (2022)", price: 8000000, speed: 217, handling: null, acceleration: null, description: "Obtainable (On-Sale) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Apollo+Evo", status: "onsale" },
+        { brand: "McLaren", name: "McLaren F1 (1993)", price: 20000000, speed: 240, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 3 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+F1", status: "onsale" },
+        { brand: "NASCAR", name: "NASCAR Ford Mustang Dark Horse (2026)", price: null, speed: 211, handling: 52, acceleration: 36, description: "On-Sale (Licensed); 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=NASCAR+Mustang", status: "onsale" },
+        { brand: "Lamborghini", name: "Lamborghini Temerario (Alleggerita Package) (2025)", price: null, speed: 217, handling: 60, acceleration: 55, description: "On-Sale (Limited) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Lambo+Temerario", status: "onsale" },
+        { brand: "Cadillac", name: "2024 Cadillac CT4-V Blackwing", price: 500000, speed: 189, handling: 49, acceleration: 29, description: "On-Sale (Limited) sedan; RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+CT4-V", status: "onsale" },
+        { brand: "Nissan", name: "Nissan Z NISMO GT4 (2024)", price: 900000, speed: 196, handling: null, acceleration: null, description: "On-Sale (Limited) (Licensed); 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Nissan+Z+Nismo", status: "onsale" },
+        { brand: "Porsche", name: "2018 Porsche 911 GT2 RS 'Weissach Package'", price: 1200000, speed: 218, handling: 51, acceleration: 54, description: "On-Sale (Limited) (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT2+RS+Weissach", status: "onsale" },
+        { brand: "Pagani", name: "Pagani Huayra Roadster BC (2019)", price: 4800000, speed: 220, handling: null, acceleration: null, description: "On-Sale (Licensed) hypercar; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Huayra+Roadster+BC", status: "onsale" },
+        { brand: "Audi", name: "Audi R8 GT Coupé (2023)", price: null, speed: 197, handling: null, acceleration: null, description: "On-Sale (Licensed) supercar; 2 chỗ. (800 Robux)", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+R8+GT+2023", status: "onsale" },
+
+        // ===== TRANG 12: THUYỀN & MÁY BAY =====
+        { brand: "Bayliner", name: "Bayliner VR6 Bowrider", price: null, speed: 0, handling: null, acceleration: null, description: "On-Sale powerboat; 10 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Bayliner+VR6", status: "onsale" },
+        { brand: "Boston Whaler", name: "Boston Whaler 170 Montauk", price: null, speed: 0, handling: null, acceleration: null, description: "On-Sale motor boat; 3 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Boston+Whaler+170", status: "onsale" },
+        { brand: "Boston Whaler", name: "Boston Whaler 420 Outrage", price: null, speed: 0, handling: null, acceleration: null, description: "On-Sale motor boat; 20 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Boston+Whaler+420", status: "onsale" },
+        { brand: "Heyday", name: "Heyday WT Surf", price: null, speed: 0, handling: null, acceleration: null, description: "On-Sale powerboat; 17 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Heyday+WT+Surf", status: "onsale" },
+        { brand: "Robinson", name: "Robinson R22 (1979)", price: 150000, speed: 142, handling: null, acceleration: null, description: "On-Sale aircraft; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Robinson+R22", status: "onsale" },
+        { brand: "AgustaWestland", name: "AgustaWestland A109E Power (2002)", price: 6200000, speed: 312, handling: null, acceleration: null, description: "On-Sale aircraft; 7 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=AgustaWestland+A109E", status: "onsale" }
+    ];
+
+    const codes = [
+        { code: "RDCNASCAR25", reward: "NASCAR Toyota Camry XSE #25" },
+        { code: "NASCAR100M", reward: "200 Trophies" },
+        { code: "BADGUYS2", reward: "The Bad Guys 2 Betty Beater NASCAR" },
+        { code: "MARCH2026", reward: "Chevrolet Camaro ZL1 (Free)" }
+    ];
+
+    // ==========================================
+    // LOGIC HIỂN THỊ
+    // ==========================================
+    let currentBrand = "all";
+    let currentSearch = "";
+
+    // ----- FORMAT HELPERS -----
+    function formatPrice(p) {
+        if (p === null || p === undefined) return "Code / Pack / Event";
+        if (p === 0) return "Free";
+        return "$" + p.toLocaleString();
+    }
+
+    function formatSpeed(s) {
+        if (s === null || s === undefined) return "—";
+        const kmh = Math.round(s * 1.60934);
+        return `${s} mph (${kmh} km/h)`;
+    }
+
+    function formatHandling(h) {
+        if (h === null || h === undefined) return "—";
+        return h + "%";
+    }
+
+    function formatAcceleration(a) {
+        if (a === null || a === undefined) return "—";
+        if (a === 0) return "0s";
+        return a + (a < 10 ? "s" : "%");
+    }
+
+    function getStatusLabel(status) {
+        if (status === 'onsale') return '<span class="status-badge status-onsale">On-Sale</span>';
+        if (status === 'offsale') return '<span class="status-badge status-offsale">Off-Sale</span>';
+        if (status === 'event') return '<span class="status-badge status-event">Event</span>';
+        if (status === 'limited') return '<span class="status-badge status-limited">Limited</span>';
+        return '<span class="status-badge status-unknown">—</span>';
+    }
+
+    // ----- BRAND LIST -----
+    function getBrandList() {
+        const brands = [];
+        const seen = new Set();
+        vehicles.forEach(v => {
+            if (!seen.has(v.brand)) {
+                seen.add(v.brand);
+                brands.push({ name: v.brand, count: vehicles.filter(x => x.brand === v.brand).length });
+            }
+        });
+        return brands.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    function renderBrandChips() {
+        const brands = getBrandList();
+        const container = document.getElementById("brandChips");
+        const totalCount = vehicles.length;
+
+        let html = `<div class="chip ${currentBrand === 'all' ? 'active' : ''}" data-brand="all">Tất cả <span class="count">${totalCount}</span></div>`;
+        brands.forEach(b => {
+            html += `<div class="chip ${currentBrand === b.name ? 'active' : ''}" data-brand="${b.name}">${b.name} <span class="count">${b.count}</span></div>`;
+        });
+        container.innerHTML = html;
+
+        container.querySelectorAll(".chip").forEach(chip => {
+            chip.addEventListener("click", () => {
+                currentBrand = chip.dataset.brand;
+                container.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+                chip.classList.add("active");
+                document.getElementById("brandCurrent").textContent = currentBrand === "all" ? "Tất cả" : currentBrand;
+                document.getElementById("brandChipsWrap").classList.remove("open");
+                document.getElementById("brandToggle").classList.remove("open");
+                document.getElementById("brandToggle").setAttribute("aria-expanded", "false");
+                renderVehicles();
+            });
+        });
+    }
+
+    // ----- VEHICLES -----
+    function renderVehicles() {
+        const container = document.getElementById("vehiclesContainer");
+        const k = currentSearch.trim().toLowerCase();
+        let filtered = vehicles;
+
+        if (currentBrand !== "all") {
+            filtered = filtered.filter(v => v.brand === currentBrand);
+        }
+        if (k) {
+            filtered = filtered.filter(v => {
+                const nameMatch = v.name.toLowerCase().includes(k);
+                const brandMatch = v.brand.toLowerCase().includes(k);
+                const statusText = v.status === 'offsale' ? 'off-sale offsale'
+                                : v.status === 'onsale' ? 'on-sale onsale'
+                                : v.status || '';
+                const statusMatch = statusText.includes(k);
+                return nameMatch || brandMatch || statusMatch;
+            });
+        }
+
+        if (!filtered.length) {
+            container.innerHTML = '<div class="empty-state">Không tìm thấy xe hoặc hãng phù hợp.</div>';
+            return;
+        }
+
+        const groups = {};
+        const order = [];
+        filtered.forEach(v => {
+            if (!groups[v.brand]) {
+                groups[v.brand] = [];
+                order.push(v.brand);
+            }
+            groups[v.brand].push(v);
+        });
+
+        let html = "";
+        order.forEach(brand => {
+            const list = groups[brand];
+            html += `<div class="brand-section">
+                <div class="brand-title">${brand}<span class="brand-count">${list.length} xe</span></div>
+                <div class="vehicle-grid">`;
+
+            list.forEach(v => {
+                const idx = vehicles.indexOf(v);
+                html += `
+                    <div class="vehicle-card" data-idx="${idx}">
+                        <div class="vehicle-image-wrap">
+                            <img class="vehicle-image" src="${v.image}" alt="${v.name}" loading="lazy">
+                        </div>
+                        <div class="vehicle-info">
+                            ${getStatusLabel(v.status)}
+                            <div class="vehicle-name">${v.name}</div>
+                            <div class="vehicle-price">${formatPrice(v.price)}</div>
+                            <div class="vehicle-quick-stats">
+                                <span>⚡ ${formatSpeed(v.speed)}</span>
+                                <span>🎯 Xử lý: ${formatHandling(v.handling)}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+
+            html += `</div></div>`;
+        });
+
+        container.innerHTML = html;
+
+        // Gắn sự kiện click bằng addEventListener (an toàn hơn onclick inline)
+        container.querySelectorAll(".vehicle-card").forEach(card => {
+            card.addEventListener("click", () => {
+                const idx = parseInt(card.dataset.idx, 10);
+                openModal(idx);
+            });
+        });
+    }
+
+    function renderCodes() {
+        document.getElementById("codeList").innerHTML = codes.map(c => `
+            <div class="code-item">
+                <span class="code-name">${c.code}</span>
+                <span class="code-reward">${c.reward}</span>
+            </div>
+        `).join("");
+    }
+
+    function renderStats() {
+        const total = vehicles.length;
+        const onsale = vehicles.filter(v => v.status === 'onsale').length;
+        const offsale = vehicles.filter(v => v.status === 'offsale').length;
+        const brands = new Set(vehicles.map(v => v.brand)).size;
+
+        document.getElementById("stat-total").textContent = total;
+        document.getElementById("stat-onsale").textContent = onsale;
+        document.getElementById("stat-offsale").textContent = offsale;
+        document.getElementById("stat-brands").textContent = brands;
+        document.getElementById("total-badge").textContent = total + " Xe";
+    }
+
+    // ----- MODAL -----
+    const overlay = document.getElementById("modalOverlay");
+    const modalClose = document.getElementById("modalClose");
+    const modalImage = document.getElementById("modalImage");
+    const modalBrand = document.getElementById("modalBrand");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalPrice = document.getElementById("modalPrice");
+    const modalStats = document.getElementById("modalStats");
+    const modalDesc = document.getElementById("modalDesc");
+
+    function openModal(index) {
+        const v = vehicles[index];
+        if (!v) return;
+
+        modalImage.src = v.image;
+        modalImage.alt = v.name;
+        modalBrand.textContent = v.brand;
+        modalTitle.textContent = v.name;
+        modalPrice.textContent = formatPrice(v.price);
+
+        modalStats.innerHTML = `
+            <div class="modal-stat"><div class="modal-stat-label">Tốc độ tối đa</div><div class="modal-stat-value">${formatSpeed(v.speed)}</div></div>
+            <div class="modal-stat"><div class="modal-stat-label">Độ xử lý</div><div class="modal-stat-value">${formatHandling(v.handling)}</div></div>
+            <div class="modal-stat"><div class="modal-stat-label">Tăng tốc</div><div class="modal-stat-value">${formatAcceleration(v.acceleration)}</div></div>
+            <div class="modal-stat"><div class="modal-stat-label">Trạng thái</div><div class="modal-stat-value">${getStatusLabel(v.status)}</div></div>
+        `;
+        modalDesc.textContent = v.description || "Chưa có mô tả cho xe này.";
+
+        overlay.classList.add("open");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+        overlay.classList.remove("open");
+        document.body.style.overflow = "";
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    overlay.addEventListener("click", e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+    // ----- BRAND TOGGLE -----
+    document.getElementById("brandToggle").addEventListener("click", () => {
+        const wrap = document.getElementById("brandChipsWrap");
+        const btn = document.getElementById("brandToggle");
+        wrap.classList.toggle("open");
+        btn.classList.toggle("open");
+        btn.setAttribute("aria-expanded", wrap.classList.contains("open") ? "true" : "false");
+    });
+
+    // ----- SEARCH -----
+    document.getElementById("searchInput").addEventListener("input", e => {
+        currentSearch = e.target.value;
+        renderVehicles();
+    });
+
+    // ----- INIT -----
+    renderStats();
+    renderBrandChips();
+    renderVehicles();
+    renderCodes();
+</script>
+</body>
+</html>

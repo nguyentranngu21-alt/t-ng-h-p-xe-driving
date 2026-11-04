@@ -136,7 +136,7 @@
     </div>
 
     <div class="search-section">
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm xe, hãng, 'vip', 'trackpass'...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm xe, hãng, 'vip', 'luxury'...">
     </div>
 
     <button class="brand-toggle" id="brandToggle" type="button" aria-expanded="false" aria-controls="brandChipsWrap">
@@ -181,6 +181,12 @@
         { brand: "Apollo", name: "Apollo Intensa Emozione (2018)", price: 0, speed: 215, handling: 58, acceleration: 45, description: "Tặng kèm khi mua VIP Gamepass (500 Robux).", image: "https://placehold.co/600x400/000000/FF8C00?text=Apollo+IE", status: "vip" },
         { brand: "Apollo", name: "Vision Fatal (Apollo) (2020)", price: 0, speed: 240, handling: 60, acceleration: 50, description: "Tặng kèm khi mua VIP Gamepass (500 Robux).", image: "https://placehold.co/600x400/000000/FF8C00?text=Vision+Fatal", status: "vip" },
         
+        // --- Luxury Gamepass ---
+        { brand: "Cadillac", name: "Cadillac Coupe De Ville (1959)", price: 45000, speed: 115, handling: 38, acceleration: 31, description: "Cần Luxury Gamepass; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+Coupe", status: "luxury" },
+        { brand: "Cadillac", name: "Cadillac Eldorado (1967)", price: 100000, speed: 120, handling: 31, acceleration: 15, description: "Cần Luxury Gamepass; FWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+Eldorado", status: "luxury" },
+        { brand: "Cadillac", name: "2013 Cadillac XTS Limousine", price: null, speed: 140, handling: 45, acceleration: 20, description: "Cần Luxury Gamepass; Limousine. (225KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+XTS", status: "luxury" },
+        { brand: "Bentley", name: "2023 Bentley Flying Spur Speed Edition 12", price: 370000, speed: 207, handling: 42, acceleration: 30, description: "Cần Luxury Gamepass; Sedan; AWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Bentley+Flying+Spur", status: "luxury" },
+
         // --- Track Pass ---
         { brand: "McLaren", name: "McLaren Solus GT (2023)", price: 9000000, speed: 209, handling: 68, acceleration: 43, description: "On-Sale (Track Pass Required); 1 chỗ. (337KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+Solus", status: "trackpass" },
         { brand: "Porsche", name: "Porsche 963 LMDh", price: 8350000, speed: 205, handling: 62, acceleration: 40, description: "On-Sale (Track Pass Required); RWD; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+963", status: "trackpass" },
@@ -189,7 +195,6 @@
         { brand: "SSC", name: "SSC Tuatara Aggressor (2023)", price: 6000000, speed: 295, handling: null, acceleration: null, description: "On-Sale (Track Pass Required); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=SSC+Aggressor", status: "trackpass" },
         { brand: "KTM", name: "KTM RC 8C (2023)", price: 500000, speed: 165, handling: 46, acceleration: 42, description: "On-Sale (Track Pass Required); 1 chỗ. (265KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=KTM+RC+8C", status: "trackpass" },
         { brand: "Maserati", name: "Maserati MC12 Versione Corsa (2005)", price: 1999699, speed: 214, handling: null, acceleration: null, description: "Cần Track Pass (Track Cars Gamepass); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=MC12+Corsa", status: "trackpass" },
-        { brand: "Ferrari", name: "Ferrari 599XX (2010)", price: 1940000, speed: 242, handling: null, acceleration: null, description: "Cần Track Pass (Track Car Gamepass); 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Ferrari+599XX", status: "trackpass" },
         { brand: "Opel", name: "2016 Opel Astra TCR", price: 125000, speed: 162, handling: 58, acceleration: 21, description: "On-Sale race car; RWD; 1 chỗ. (Track Pass Required)", image: "https://placehold.co/600x400/000000/FF8C00?text=Opel+Astra+TCR", status: "trackpass" },
         { brand: "Audi", name: "Audi R8 LMS ultra (2014)", price: 140000, speed: 207, handling: 50, acceleration: 39, description: "On-Sale + Track Pass Gamepass (Licensed) race car; 1 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Audi+R8+LMS", status: "trackpass" },
         { brand: "KTM", name: "KTM X-BOW GT4 Evo", price: 290000, speed: 164, handling: 68, acceleration: 37, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ. (Track Pass Required)", image: "https://placehold.co/600x400/000000/FF8C00?text=KTM+X-BOW+GT4", status: "trackpass" },
@@ -212,8 +217,6 @@
         // --- Game Pass khác ---
         { brand: "IC", name: "IC CE200 (2006)", price: null, speed: 95, handling: null, acceleration: null, description: "Bus Access Gamepass (25 Robux); 15 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=IC+CE200", status: "bus" },
         { brand: "Ford", name: "Ford Crown Victoria Police Interceptor (2002)", price: 25000, speed: 132, handling: 38, acceleration: 30, description: "Police Job Gamepass (35 Robux); RWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Crown+Vic+Police", status: "police" },
-        { brand: "Cadillac", name: "Cadillac Coupe De Ville (1959)", price: 45000, speed: 115, handling: 38, acceleration: 31, description: "Cần Luxury Gamepass; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+Coupe", status: "luxury" },
-        { brand: "Cadillac", name: "Cadillac Eldorado (1967)", price: 100000, speed: 120, handling: 31, acceleration: 15, description: "Cần Luxury Gamepass; FWD; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+Eldorado", status: "luxury" },
 
         // ===== XE ON-SALE =====
         { brand: "Spyker", name: "2009 Spyker C8 Aileron Spyder", price: null, speed: 187, handling: 39, acceleration: 27, description: "On-Sale (Licensed); RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Spyker+C8", status: "onsale" },
@@ -324,7 +327,6 @@
         { brand: "Ford", name: "2025 Ford Mustang GTD", price: 325000, speed: 202, handling: 62, acceleration: 46, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ. (325 KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Mustang+GTD", status: "onsale" },
         { brand: "Land Rover", name: "Land Rover Defender 110 (1992)", price: 340000, speed: 140, handling: 39, acceleration: 26, description: "On-Sale (Licensed) 4x4; AWD; 8 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Land+Rover+Defender+1992", status: "onsale" },
         { brand: "McLaren", name: "2023 McLaren 750S Coupe", price: 350000, speed: 210, handling: 45, acceleration: 44, description: "On-Sale (Licensed) coupe; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=McLaren+750S", status: "onsale" },
-        { brand: "Bentley", name: "2023 Bentley Flying Spur Speed Edition 12", price: 370000, speed: 207, handling: 42, acceleration: 30, description: "On-Sale (Licensed) sedan; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Bentley+Flying+Spur", status: "onsale" },
         { brand: "Porsche", name: "Porsche 911 GT3 RS (997.2)", price: 390000, speed: 193, handling: 40, acceleration: 31, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT3+RS+997", status: "onsale" },
         { brand: "Porsche", name: "Porsche 911 GT2 RS (2018)", price: 400000, speed: 211, handling: 47, acceleration: 49, description: "On-Sale (Licensed) coupe; RWD; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+GT2+RS", status: "onsale" },
         { brand: "Porsche", name: "Porsche 911 Raceborn", price: 400000, speed: 183, handling: 50, acceleration: 30, description: "On-Sale passenger car; 2 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+911+Raceborn", status: "onsale" },
@@ -410,7 +412,6 @@
         { brand: "Porsche", name: "Porsche Macan Electric (2025)", price: null, speed: 160, handling: 52, acceleration: 37, description: "On-Sale (Licensed) suv. (259 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Porsche+Macan", status: "onsale" },
         { brand: "Renault", name: "Renault Clio R.S. III (2010)", price: 0, speed: 138, handling: 35, acceleration: 19, description: "On-Sale (Licensed) hatchback; FWD; 4 chỗ. (222 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=Renault+Clio", status: "onsale" },
         { brand: "Aston Martin", name: "Aston Martin Rapide AMR (2018)", price: null, speed: 205, handling: null, acceleration: null, description: "Onsale (Licensed); 4 chỗ. 1200 Robux.", image: "https://placehold.co/600x400/000000/FF8C00?text=Aston+Rapide", status: "onsale" },
-        { brand: "Cadillac", name: "2013 Cadillac XTS Limousine", price: null, speed: 140, handling: 45, acceleration: 20, description: "Licensed limousine. (225KM/H)", image: "https://placehold.co/600x400/000000/FF8C00?text=Cadillac+XTS", status: "onsale" },
         { brand: "Volkswagen", name: "1976 Volkswagen Golf GTI", price: 50000, speed: 112, handling: 30, acceleration: 15, description: "Collection passenger car; FWD; 4 chỗ. (181 km/h)", image: "https://placehold.co/600x400/000000/FF8C00?text=VW+Golf+GTI+1976", status: "onsale" },
         { brand: "Jaguar", name: "2012 Jaguar XKR-S Coupe", price: 65000, speed: 186, handling: 39, acceleration: 33, description: "Licensed coupe; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Jaguar+XKR-S+Coupe", status: "onsale" },
         { brand: "Alfa Romeo", name: "2022 Alfa Romeo Giulia Quadrifoglio", price: 150000, speed: 191, handling: null, acceleration: null, description: "Licensed sedan; 4 chỗ.", image: "https://placehold.co/600x400/000000/FF8C00?text=Alfa+Giulia", status: "onsale" },
@@ -502,7 +503,7 @@
         if (status === 'bus') return '<span class="status-badge status-bus">Bus Access</span>';
         if (status === 'police') return '<span class="status-badge status-police">Police Job</span>';
         if (status === 'luxury') return '<span class="status-badge status-luxury">Luxury</span>';
-        if (status === 'gamepass') return '<span class="status-badge status-gamepass">Game Pass</span>'; // Dự phòng
+        if (status === 'gamepass') return '<span class="status-badge status-gamepass">Game Pass</span>';
         return '<span class="status-badge status-unknown">—</span>';
     }
 
